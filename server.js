@@ -1,4 +1,6 @@
+//paquets
 const Koa = require('koa');
+const convert = require('koa-convert');
 const json = require('koa-json');
 const views = require('koa-views');
 const bodyparser = require('koa-bodyparser');
@@ -14,21 +16,24 @@ const indexRouter = require('./routes/index');
 onerror(app);
 
 // middlewares
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
-app.use( json() );
-app.use( logger() );
-app.use(require('koa-static')(__dirname + '/public'))
+app.use( convert(bodyparser()) )
+app.use( convert(json()) );
+app.use( convert(logger()) );
+app.use( convert(require('koa-static')(__dirname + '/public') ))
 
 //views
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
 
-//initialisation des router
-
+//initialisation des routes
 app.use( indexRouter.routes() ).use( indexRouter.allowedMethods() );
+
+// response
+app.on('error', async(err, ctx) => {
+  console.log(err)
+  log.error('server error', err, ctx);
+});
 
 //launch api on port 3000
 app.listen(3000);
