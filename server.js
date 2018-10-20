@@ -6,6 +6,7 @@ const views = require('koa-views');
 const bodyparser = require('koa-bodyparser');
 const onerror = require('koa-onerror');
 const logger = require('koa-logger');
+const error = require('koa-error');
 
 //Init Application
 const app = new Koa();
@@ -29,11 +30,19 @@ app.use(views(__dirname + '/views', {
 //initialisation des routes
 app.use( indexRouter.routes() ).use( indexRouter.allowedMethods() );
 
-// response
-app.on('error', async(err, ctx) => {
-  console.log(err)
-  log.error('server error', err, ctx);
+
+// // catch 404 and forward to error handler
+app.use(error({
+  engine: 'ejs',
+  template: __dirname + '/views/error.ejs'
+}));
+
+// error-handling
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx);
 });
+
+
 
 //launch api on port 3000
 app.listen(3000);
