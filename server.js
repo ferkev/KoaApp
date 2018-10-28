@@ -10,7 +10,6 @@ const error = require('koa-error');
 const graphqlHTTP = require('koa-graphql');
 const mount = require('koa-mount');
 const schema = require('./schema');
-const mongoose = require('./Mongoose')
 
 //Init Application
 const app = new Koa();
@@ -18,8 +17,7 @@ const app = new Koa();
 //routes
 const indexRouter = require('./routes/index');
 
-
-
+//gestion des erreurs
 onerror(app);
 
 // middlewares
@@ -36,7 +34,7 @@ app.use(views(__dirname + '/views', {
 //initialisation des routes
 app.use( indexRouter.routes() ).use( indexRouter.allowedMethods() );
 
-
+//initialisation de graphQl
 app.use(mount('/graphql', convert(graphqlHTTP({
   schema,
   pretty: true,
@@ -53,7 +51,6 @@ app.use(error({
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
 });
-
 
 //launch api on port 3000
 app.listen(3000);
