@@ -31,7 +31,7 @@ app.use(views(__dirname + '/views', {
 app.use( indexRouter.routes() ).use( indexRouter.allowedMethods() );
 
 
-// // catch 404 and forward to error handler
+// catch 404
 app.use(error({
   engine: 'ejs',
   template: __dirname + '/views/error.ejs'
@@ -41,8 +41,6 @@ app.use(error({
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
 });
-
-
 
 //launch api on port 3000
 app.listen(3000);
