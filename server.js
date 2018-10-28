@@ -7,12 +7,18 @@ const bodyparser = require('koa-bodyparser');
 const onerror = require('koa-onerror');
 const logger = require('koa-logger');
 const error = require('koa-error');
+const graphqlHTTP = require('koa-graphql');
+const mount = require('koa-mount');
+const schema = require('./schema');
+const mongoose = require('./Mongoose')
 
 //Init Application
 const app = new Koa();
 
 //routes
 const indexRouter = require('./routes/index');
+
+
 
 onerror(app);
 
@@ -31,6 +37,12 @@ app.use(views(__dirname + '/views', {
 app.use( indexRouter.routes() ).use( indexRouter.allowedMethods() );
 
 
+app.use(mount('/graphql', convert(graphqlHTTP({
+  schema,
+  pretty: true,
+  graphiql: true,
+}))));
+
 // catch 404
 app.use(error({
   engine: 'ejs',
@@ -41,6 +53,7 @@ app.use(error({
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
 });
+
 
 //launch api on port 3000
 app.listen(3000);
