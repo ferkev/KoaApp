@@ -1,13 +1,18 @@
+//Paquets
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true} );
+//connection mongoose
+mongoose.connect('mongodb://localhost/graphQlTest', { useNewUrlParser: true} );
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
+//export mongoose
+module.exports = () => {
 
-db.once('open', async () => {
-  await console.log('connecté !!')
-});
+    //connection à la bdd
+    db.once('open', async () => { await console.log('connecté à la bdd!!') });
 
-module.exports = mongoose;
+    //affichage des erreurs en cas de problèmes de connexion
+    db.on('error', async (error) => { await console.log(error) } );
+
+};

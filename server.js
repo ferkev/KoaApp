@@ -1,4 +1,4 @@
-//paquets
+//Paquets
 const Koa = require('koa');
 const convert = require('koa-convert');
 const json = require('koa-json');
@@ -9,8 +9,13 @@ const logger = require('koa-logger');
 const error = require('koa-error');
 const graphqlHTTP = require('koa-graphql');
 const mount = require('koa-mount');
+
+
+//Modules
+const mongoose = require('./mongoose');
 const schema = require('./schema');
 
+mongoose();
 //Init Application
 const app = new Koa();
 
