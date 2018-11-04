@@ -1,4 +1,4 @@
-//Modules
+//Paquets
 const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
@@ -13,15 +13,15 @@ const customerSchema = new schema({
   created_at: {type: Date, default: Date.now }
 });
 
-customerSchema.pre('save', function(next) {
+customerSchema.pre('save', (next) => {
   var customer = this;
 
   // generate a salt
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+  bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
     if (err) return next(err);
 
     // hash the password using our new salt
-    bcrypt.hash(customer.password, salt, function(err, hash) {
+    bcrypt.hash(customer.password, salt, (err, hash) => {
       if (err) return next(err);
 
       // override the cleartext password with the hashed one
@@ -30,7 +30,6 @@ customerSchema.pre('save', function(next) {
     });
   });
 });
-
 
 // export du model
 module.exports = mongoose.model('customers', customerSchema);
